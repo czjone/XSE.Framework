@@ -3,6 +3,11 @@
 ## what ?
 
 ## build & install
+### macos
+
+### mswin
+
+### linux
 
 ## how to ?
 
