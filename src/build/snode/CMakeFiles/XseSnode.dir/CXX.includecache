@@ -6,9 +6,15 @@
 
 #IncludeRegexTransform: 
 
+/Users/solyess/Documents/work/Github/XSE.Frameworks/src/snode/../core/log.h
+string
+-
+
 /Users/solyess/Documents/work/Github/XSE.Frameworks/src/snode/snode.cc
 stdlib.h
 -
 stdio.h
+-
+core/log.h
 -
 

@@ -46,14 +46,17 @@ endif()
 # 	set(CMAKE_EXE_LINKER_FLAGS "-framework CFNetwork.framework")
 # ENDIF(APPLE)
 
+if(APPLE)
+    SET(CMAKE_BUILD_TYPE "Debug") 
+    SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")  
+    SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")    
+endif()
+
 #################################### for compiles files ########################################
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../
 )
 
 #Core
-# AUX_SOURCE_DIRECTORY(core SRC_LIST)
-set(SRC_LIST 
-    netio.cc
-)
+AUX_SOURCE_DIRECTORY(../core SRC_LIST)
 ADD_LIBRARY(XseCore STATIC ${SRC_LIST})

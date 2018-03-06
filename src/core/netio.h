@@ -7,10 +7,8 @@
 
 namespace Xse {
     namespace Network {
-        class Netio {
-        public:
-            // void (*OnReadComplate)(char* bytes,size_t size);
 
+        class Netio {
         public:
 
             Netio();
@@ -23,11 +21,10 @@ namespace Xse {
 
             virtual size_t Read(char* buf,size_t size);
 
-            // virtual size_t ReadAsy(size_t *size,OnReadComplate* callback);
-
             virtual bool IsAlive() const;
 
-            virtual void Close();
+            virtual void Close(); 
+            
         };
         
         class ServerOption{
