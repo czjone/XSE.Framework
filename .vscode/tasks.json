@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "XseBuilder-build core",
+            "type": "shell",
+            "command": "sh src/build.sh",
+            "args": ["core","build","-debug"],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            // Use the standard MS compiler pattern to detect errors, warnings and infos
+            "problemMatcher": "$msCompile"
+        },
+        
+        {
+            "label": "XseBuilder-clean core",
+            "type": "shell",
+            "command": "sh src/build.sh",
+            "args": ["core","clean",""],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "XseBuilder-build snode",
+            "type": "shell",
+            "command": "sh src/build.sh",
+            "args": ["snode","build","debug"],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            // Use the standard MS compiler pattern to detect errors, warnings and infos
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "XseBuilder-clean snode",
+            "type": "shell",
+            "command": "sh src/build.sh",
+            "args": ["snode","clean",""],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            // Use the standard MS compiler pattern to detect errors, warnings and infos
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

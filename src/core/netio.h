@@ -1,15 +1,15 @@
 #ifndef XSE_CORE_NETWORK_NETIO_H
 #define XSE_CORE_NETWORK_NETIO_H 1
 
-#include "core/base/event.h"
+#include "core/event.h"
 #include <string>
 
 
 namespace Xse {
     namespace Network {
         class Netio {
-            
-            typedef void (*)(char* bytes,size_t size) OnReadComplate;
+        public:
+            // void (*OnReadComplate)(char* bytes,size_t size);
 
         public:
 
@@ -23,7 +23,7 @@ namespace Xse {
 
             virtual size_t Read(char* buf,size_t size);
 
-            virtual size_t ReadAsy(size *size,OnReadComplate callback);
+            // virtual size_t ReadAsy(size_t *size,OnReadComplate* callback);
 
             virtual bool IsAlive() const;
 
@@ -36,7 +36,7 @@ namespace Xse {
             
             ServerOption(std::string host,int port);
             
-            inline std::string& getHost(void) const{
+            inline const std::string& getHost(void) const{
                 return this->host;
             }
             
@@ -44,18 +44,18 @@ namespace Xse {
                 return this->port;
             }
         private:
-            std::string host;
+            const std::string host;
             int port;
-        }
+        };
+
         class Server:Dispatcher {
             
         public:
             
-            Server(string host,string port);
+            Server(std::string host,std::string port);
             
             Server(ServerOption option);
-            
-        }
+        };
     }
 }
 #endif

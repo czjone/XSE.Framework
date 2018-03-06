@@ -1,5 +1,6 @@
 #ifndef XSE_CORE_BASE_EVENT_H
 #define XSE_CORE_BASE_EVENT_H 1
+
 namespace Xse {
     
     class Dispatcher;
