@@ -9,21 +9,21 @@
 
 namespace Xse {
 /**
- PS:连续的内存,只管读的速度，不管写入的速度
+ PS:连续的内存,只管读的速度，不管写入的速度,快速读取和自动成倍的扩容内存
  */
-class buffer {
+class FastReadBuffer {
 #define DEFAULT_CAP 8
 public:
-    buffer();
-    buffer(const char* c,size_t len);
-    virtual ~buffer(void);
+    FastReadBuffer();
+    FastReadBuffer(const char* c,size_t len);
+    virtual ~FastReadBuffer(void);
     
-    inline buffer& operator<< (const char* bytes){
+    inline FastReadBuffer& operator<< (const char* bytes){
         size_t len = strlen(bytes);
         return this->write(bytes, len);
     };
     
-    inline buffer& write (const char* bytes,size_t len){
+    inline FastReadBuffer& write (const char* bytes,size_t len){
         size_t resizeCap = this->cap;
         while (resizeCap - this->pos < len) { resizeCap *=2; }
         if(this->cap != resizeCap){
