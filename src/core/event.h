@@ -11,7 +11,7 @@ namespace Xse {
 
     class Dispatcher;
     
-    typedef int EventType;
+    typedef unsigned int EventType;
     
     class Listener {
         
@@ -19,14 +19,15 @@ namespace Xse {
         
     public:
         
-        Listener();
+        Listener() noexcept;
         
-        virtual ~Listener();
+        virtual ~Listener() noexcept;
 
         // bool operator==(const Listener *listener) const;     
     protected:
         
-        virtual void Handler(void* sender,void *data) = 0;
+        //执行器不处理执行的结果，也不处理执行过程中的任何异常
+        virtual void Handler(void* sender,void *data = nullptr) noexcept;
     };
     
     class Dispatcher {

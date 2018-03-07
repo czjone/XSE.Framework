@@ -1,9 +1,9 @@
 #include "event.h"
+#include "thread.h"
 
 using namespace Xse::Event;
 
-Listener:: Listener()
-{
+Listener:: Listener() noexcept {
 
 }
 
@@ -11,7 +11,7 @@ Listener::~Listener(){
 
 }
 
-void Listener::Handler(void* sender,void *data){
+void Listener::Handler(void* sender,void *data) noexcept {
 
 }
 
@@ -43,7 +43,7 @@ void Dispatcher::Dispatch(EventType etype,void* data){
 }
         
 void Dispatcher::AddEventListener(EventType type,Listener &listener){
-    mut.lock();
+    Xse::Thread::LockGuard(this->mut); //allways lock befor function execute complate.
     std::vector<Listener*> listeners;
     if(evts.find(type) == evts.end()){
         evts[type] = listeners;
@@ -51,11 +51,10 @@ void Dispatcher::AddEventListener(EventType type,Listener &listener){
         listeners = evts[type];
     }
     listeners.push_back(&listener);
-    mut.unlock();
 }
         
 void Dispatcher::RemoveEventListener(EventType type,Listener &listener){
-    mut.lock();
+    Xse::Thread::LockGuard(this->mut); //allways lock befor function execute complate.
     if(evts.find(type) != evts.end()){
         std::vector<Listener*> listeners = evts[type];
         for ( std::vector<Listener*>::iterator iter = listeners.begin(); iter != listeners.end();)
@@ -68,5 +67,4 @@ void Dispatcher::RemoveEventListener(EventType type,Listener &listener){
             evts.erase(evts.find(type));
         }
     }
-    mut.unlock();
 }

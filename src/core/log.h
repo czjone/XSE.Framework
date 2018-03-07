@@ -2,6 +2,7 @@
 #define XSE_CORE_LOG_H 1
 
 #include <string>
+#include <core/types.h>
 
 namespace Xse {
     class Log {    
@@ -17,7 +18,7 @@ namespace Xse {
 
         static void Write(Level level,std::string &msg);
 
-        static void Assert(bool exp,const char* msg);
+        static void Assert(Boolean exp,const char* msg);
     };
 }
 #endif

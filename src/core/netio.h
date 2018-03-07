@@ -1,37 +1,37 @@
 #ifndef XSE_CORE_NETWORK_NETIO_H
 #define XSE_CORE_NETWORK_NETIO_H 1
 
-#include "core/event.h"
-#include <string>
-
+#include <core/event.h>
+#include <core/stream.h>
 
 namespace Xse {
-    namespace Network {
+    namespace Network :Xse::IStream<Byte>,Xse::OStream<Byte> {
 
-        class Netio {
+        class Netio{
+
         public:
 
             Netio();
 
             virtual ~Netio(void);
 
-            virtual void Write(char* byte,size_t size);
+            virtual bool IsAlive() const = 0;
 
-            virtual void WriteAsy(char* bytes,size_t size);
+            virtual void Close() = 0; 
+        };
 
-            virtual size_t Read(char* buf,size_t size);
-
-            virtual bool IsAlive() const;
-
-            virtual void Close(); 
-            
+        enum CommType : unsigned char {
+            TCP,
+            UDP,
         };
         
         class ServerOption{
             
         public:
             
-            ServerOption(std::string host,int port);
+            ServerOption(std::string host,int port,CommType type);
+
+            virtual ~ServerOption(void);
             
             inline const std::string& getHost(void) const{
                 return this->host;
@@ -40,18 +40,39 @@ namespace Xse {
             inline int getPort(void) const {
                 return this->port;
             }
+
+            inline CommType GetCommType() const {
+                return this->type;
+            }
         private:
             const std::string host;
             int port;
+            CommType type;
         };
 
-        class Server:Dispatcher {
+        class Server: virtual public Event::Dispatcher {
             
+        protected:
+        
+            enum Event : Event::EventType {
+                ON_START,
+                ON_STOP,
+                ON_NEWCLIENT_CONNECTED,
+            };
+
         public:
             
             Server(std::string host,std::string port);
             
             Server(ServerOption option);
+
+            virtual ~Server(void);
+
+            void Run() ;
+
+            void Pause();
+
+            void Stop();
         };
     }
 }

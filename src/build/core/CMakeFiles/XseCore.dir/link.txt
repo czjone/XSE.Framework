@@ -1,2 +1,0 @@
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libXseCore.a  CMakeFiles/XseCore.dir/base64.cc.o CMakeFiles/XseCore.dir/buffer.cc.o CMakeFiles/XseCore.dir/log.cc.o CMakeFiles/XseCore.dir/netio.cc.o
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libXseCore.a

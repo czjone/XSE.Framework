@@ -1,3 +1,0 @@
-/Users/solyess/Documents/work/Github/XSE.Frameworks/src/build/snode/CMakeFiles/rebuild_cache.dir
-/Users/solyess/Documents/work/Github/XSE.Frameworks/src/build/snode/CMakeFiles/edit_cache.dir
-/Users/solyess/Documents/work/Github/XSE.Frameworks/src/build/snode/CMakeFiles/XseSnode.dir
