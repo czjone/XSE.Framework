@@ -10,6 +10,7 @@ void Xse::Thread::UnLock(std::mutex &mutex){
     mutex.unlock();
 }
 
+//TODO 后面改为信号量来实现
 void  Xse::Thread::Sleep(UInt ms){
     usleep(ms*0.001); //微秒转ms.
 }

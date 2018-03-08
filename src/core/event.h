@@ -31,7 +31,7 @@ namespace Xse {
     };
     
     class Dispatcher {
-        typedef std::map<EventType,std::vector<Listener*>> Events;
+        typedef std::map<EventType,std::vector<Listener*>*> Events;
     public:
         
         Dispatcher();

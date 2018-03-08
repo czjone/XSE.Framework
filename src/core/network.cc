@@ -1,5 +1,6 @@
 #include "network.h"
 #include "core/thread.h"
+
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -7,9 +8,7 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
-#include <time.h>
-#include <stdlib.h>
+
 
 using namespace Xse::Network;
 
@@ -28,6 +27,23 @@ static EndPort Xse::Network::MakeEndPort(const char* host,Int port){
     return endPort;
 }
 
+///////////////////////////////////////////////////////
+/// Xse::Network::SocketIO 
+///////////////////////////////////////////////////////
+Xse::Network::SocketIO::SocketIO(){
+
+}
+Xse::Network::SocketIO::~SocketIO(){
+
+}
+void Xse::Network::SocketIO::Send(const char* ptr, Size size){
+    // write(this->socketfd,ptr,size,0);
+}
+void Xse::Network::SocketIO::ShutDown(){
+    this->Dispatch(SocketIO::EventType::ON_CLOSED,this);
+    // close(this->socketfd,SHUT_RDWR);
+    this->socketfd = 0;
+}
 ///////////////////////////////////////////////////////
 /// Xse::Network::Accepter 
 ///////////////////////////////////////////////////////
@@ -91,8 +107,14 @@ SocketIO* Xse::Network::TCPAccepter::Accept(){
         socklen_t address_len;
         struct sockaddr_in client_address;
         int client_socket = accept(this->serverfd, (struct sockaddr *)&client_address, &address_len);
-        this->Dispatch(ServerEvent::ON_NEW_CONNECTED,this);
+        SocketIO* io = new SocketIO();
+        io->socketfd = client_socket;
+        io->remotePort = client_address.sin_port;
+        io->remoteFamily = client_address.sin_family;
+        io->remoteHost = std::string(inet_ntoa(client_address.sin_addr));
+        this->Dispatch(ServerEvent::ON_NEW_CONNECTED,io);
     }
+
 }
 
 ///////////////////////////////////////////////////////
@@ -152,8 +174,12 @@ void Xse::Network::Server::Start() noexcept{
             if(this->isRun == true) {
                 this->accepter->Accept();
             }else {
-                Xse::Thread::Sleep(3000); //重启要用超过3稍以上的时间，因为我们不要太快速的服务器重启动，
+                // Xse::Thread::Sleep(3000); //重启要用超过3稍以上的时间，因为我们不要太快速的服务器重启动，
             }
         }
     }
+}
+
+void Xse::Network::Server::Handler(void* sender,void *data) noexcept {
+    
 }

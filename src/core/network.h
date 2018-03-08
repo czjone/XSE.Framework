@@ -11,10 +11,28 @@ namespace Xse {
 
         #define MAX_CLIENT_CONNECT 100
 
-        class SocketIO {
+        class TCPAccepter;
+        class UDPAccepter;
 
+        class SocketIO : virtual public Event::Dispatcher{
+            friend class TCPAccepter;
+            friend class UDPAccepter;
+            public :
+                enum EventType {
+                    ON_RECIVE_DATA,
+                    ON_ERROR,
+                    ON_CLOSED,
+                };
+        public:
+            SocketIO();
+            virtual ~SocketIO();
+            void Send(const char* ptr, Size size);
+            void ShutDown();
         private:
             Int socketfd;
+            std::string remoteHost;
+            std::string remotePort;
+            std::string remoteFamily;
         };
 
         enum CommType : unsigned char {
@@ -58,6 +76,7 @@ namespace Xse {
         };
 
         class TCPAccepter : virtual public Accepter {
+            friend class SocketIO;
             public:
                 TCPAccepter(EndPort endport) noexcept;
                 virtual ~TCPAccepter(void);
@@ -68,13 +87,14 @@ namespace Xse {
         };
 
         class UDPAccepter: virtual public Accepter {
+            friend class SocketIO;
             public:
             UDPAccepter(EndPort endport);
             virtual ~UDPAccepter(void);
             virtual SocketIO* Accept();
         };
 
-        class Server: virtual public Event::Dispatcher,virtual public Event::Listener {
+        class Server: virtual public Event::Dispatcher,virtual Event::Listener {
             
         public:
 
@@ -85,6 +105,8 @@ namespace Xse {
             virtual ~Server(void) noexcept;
 
             void Start() noexcept;
+
+            virtual void Handler(void* sender,void *data) noexcept override;
 
         private:
             Accepter * accepter;
