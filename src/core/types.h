@@ -15,6 +15,7 @@ namespace Xse {
     typedef char Byte;
     typedef unsigned char UByte;
     typedef bool Boolean;
+    typedef unsigned int State;
     
     
     #define True true

@@ -40,9 +40,9 @@ namespace Xse {
         
         virtual void Dispatch(EventType etype,void* data = nullptr);
         
-        void AddEventListener(EventType type,Listener &listener);
+        void AddEventListener(EventType type,Listener *listener);
         
-        void RemoveEventListener(EventType type,Listener &listener);
+        void RemoveEventListener(EventType type,Listener *listener);
 
         private:
             Events evts;

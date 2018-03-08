@@ -42,7 +42,7 @@ void Dispatcher::Dispatch(EventType etype,void* data){
     }
 }
         
-void Dispatcher::AddEventListener(EventType type,Listener &listener){
+void Dispatcher::AddEventListener(EventType type,Listener *listener){
     Xse::Thread::LockGuard(this->mut); //allways lock befor function execute complate.
     std::vector<Listener*> listeners;
     if(evts.find(type) == evts.end()){
@@ -50,16 +50,16 @@ void Dispatcher::AddEventListener(EventType type,Listener &listener){
     }else {
         listeners = evts[type];
     }
-    listeners.push_back(&listener);
+    listeners.push_back(listener);
 }
         
-void Dispatcher::RemoveEventListener(EventType type,Listener &listener){
+void Dispatcher::RemoveEventListener(EventType type,Listener *listener){
     Xse::Thread::LockGuard(this->mut); //allways lock befor function execute complate.
     if(evts.find(type) != evts.end()){
         std::vector<Listener*> listeners = evts[type];
         for ( std::vector<Listener*>::iterator iter = listeners.begin(); iter != listeners.end();)
         {
-            if(*iter == &listener) iter = listeners.erase(iter);
+            if(*iter == listener) iter = listeners.erase(iter);
             else iter ++;
         }
         

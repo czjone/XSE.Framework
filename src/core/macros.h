@@ -5,4 +5,6 @@
 #define DELETE(PTR) if(PTR!=NULL) {delete(PTR);PTR = NULL;}
 #define DELETE_ARRAY(PTR) if(PTR!=NULL) {delete[] (PTR);PTR = NULL;}
 
+#define BZERO(PTR,SIZE) memset(PTR, '\0', SIZE)
+
 #endif

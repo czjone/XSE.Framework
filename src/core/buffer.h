@@ -5,7 +5,7 @@
 
 #define FREE(__PTR__) free(__PTR__);__PTR__=nullptr;
 
-#define BZERO(PTR,SIZE) memset(PTR, '\0', SIZE)
+
 
 namespace Xse {
 /**
