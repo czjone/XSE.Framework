@@ -18,6 +18,7 @@ CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Fr
 CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/../core/log.h
 CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/../core/macros.h
 CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/../core/stream.h
+CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/../core/thread.h
 CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/../core/types.h
 CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/network.cc
 CMakeFiles/XseCore.dir/network.cc.o: /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/network.h

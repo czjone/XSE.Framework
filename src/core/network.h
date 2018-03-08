@@ -27,7 +27,7 @@ namespace Xse {
         #define IP_V6 AF_INET6 
 
         class EndPort {
-            public:
+        public:
             IPFamily ipfamily;
             Int port;
             std::string host;
@@ -88,6 +88,7 @@ namespace Xse {
 
         private:
             Accepter * accepter;
+            Boolean isRun;
         };
 
         class Client :Event::Dispatcher {

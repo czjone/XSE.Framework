@@ -1,4 +1,5 @@
 #include "network.h"
+#include "core/thread.h"
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -72,7 +73,7 @@ serverfd(0)
         server_addr.sin_addr.s_addr = inet_addr(endPort.host.c_str());
         BZERO(&(server_addr.sin_zero),8);
         serverfd = socket(AF_INET6, SOCK_STREAM, 0);
-         if(serverfd == -1){ Log::Write(Log::Level::ERROR,"server socket create faile."); return; }
+        if(serverfd == -1){ Log::Write(Log::Level::ERROR,"server socket create faile."); return; }
         int ret = bind(serverfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
         if(ret == -1){ Log::Write(Log::Level::ERROR,"bind server socket faile."); return; }
         if (listen(serverfd, 5) == -1) { Log::Write(Log::Level::ERROR,"server listen error."); return; }
@@ -89,10 +90,8 @@ SocketIO* Xse::Network::TCPAccepter::Accept(){
     }else {
         socklen_t address_len;
         struct sockaddr_in client_address;
-        while(true) {
-            int client_socket = accept(this->serverfd, (struct sockaddr *)&client_address, &address_len);
-            this->Dispatch(ServerEvent::ON_NEW_CONNECTED,this);
-        }
+        int client_socket = accept(this->serverfd, (struct sockaddr *)&client_address, &address_len);
+        this->Dispatch(ServerEvent::ON_NEW_CONNECTED,this);
     }
 }
 
@@ -115,7 +114,9 @@ SocketIO* Xse::Network::UDPAccepter::Accept(){
 ///////////////////////////////////////////////////////
 /// Xse::Network::Server 
 ///////////////////////////////////////////////////////
-Xse::Network::Server::Server(const char* host,Int port,CommType type) noexcept {
+Xse::Network::Server::Server(const char* host,Int port,CommType type) noexcept : isRun(False)
+
+{
     EndPort _endport = Xse::Network::MakeEndPort(host,port);
     switch(type){
         case CommType::TCP:  { accepter = new TCPAccepter(_endport); break;}
@@ -126,6 +127,7 @@ Xse::Network::Server::Server(const char* host,Int port,CommType type) noexcept {
 
 Xse::Network::Server::Server(EndPort _endport,CommType type) noexcept:        
 accepter(nullptr)
+,isRun(False)
 {
     switch(type){
         case CommType::TCP:  { accepter = new TCPAccepter(_endport); break;}
@@ -141,8 +143,17 @@ Xse::Network::Server::~Server(void) noexcept{
 void Xse::Network::Server::Start() noexcept{
     if(accepter == nullptr){
         this->Dispatch(ServerEvent::ON_ERROR,this);
-    }else {
+        return ;
+    }
+    {
+        this->isRun = True;
         this->accepter->AddEventListener(ServerEvent::ON_NEW_CONNECTED,this);
-        this->accepter->Accept();
+        while (true) {
+            if(this->isRun == true) {
+                this->accepter->Accept();
+            }else {
+                Xse::Thread::Sleep(3000); //重启要用超过3稍以上的时间，因为我们不要太快速的服务器重启动，
+            }
+        }
     }
 }

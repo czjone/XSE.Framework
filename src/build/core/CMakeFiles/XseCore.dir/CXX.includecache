@@ -30,6 +30,18 @@ core/log.h
 core/macros.h
 -
 
+/Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/../core/thread.h
+thread
+-
+mutex
+-
+functional
+-
+core/types.h
+-
+core/event.h
+-
+
 /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/../core/types.h
 stdlib.h
 -
@@ -77,6 +89,8 @@ core/types.h
 /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/network.cc
 network.h
 /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/network.h
+core/thread.h
+/Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/core/thread.h
 unistd.h
 -
 sys/socket.h
@@ -113,6 +127,8 @@ thread.h
 /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/thread.h
 core/log.h
 /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/core/log.h
+unistd.h
+-
 
 /Users/solyess/Documents/work/Github/XSE.Frameworks/src/core/thread.h
 thread

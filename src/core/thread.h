@@ -12,6 +12,8 @@ namespace Xse {
 
         static void UnLock(std::mutex &mutex);
 
+        static void Sleep(UInt ms);
+
         class LockGuard{
             public:
                 explicit LockGuard(std::mutex &_mutex);

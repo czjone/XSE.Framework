@@ -1,5 +1,6 @@
 #include "thread.h"
 #include "core/log.h"
+#include <unistd.h>
 
 void Xse::Thread::Lock(std::mutex &mutex){
     mutex.lock();
@@ -7,6 +8,10 @@ void Xse::Thread::Lock(std::mutex &mutex){
 
 void Xse::Thread::UnLock(std::mutex &mutex){
     mutex.unlock();
+}
+
+void  Xse::Thread::Sleep(UInt ms){
+    usleep(ms*0.001); //微秒转ms.
 }
  
 Xse::Thread::LockGuard::LockGuard(std::mutex &_mutex):mutex((std::mutex*)&_mutex) {
