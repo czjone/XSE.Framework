@@ -1,6 +1,4 @@
 #include "network.h"
-#include <core/thread.h>
-
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -25,6 +23,7 @@ static EndPort Xse::Network::MakeEndPort(const char* host,Int port){
     if(err) endPort.msg = "Invalid IP address";
     endPort.host = host;
     endPort.port = port;
+    endPort.ipfamily = sa->sa_family == AF_INET ? IP_V4 :IP_V6;
     return endPort;
 }
 
@@ -50,7 +49,7 @@ EndPort& Xse::Network::Accepter ::GetEndPort(){
 /// Xse::Network::TCPAccepter 
 ///////////////////////////////////////////////////////
 Xse::Network::TCPAccepter::TCPAccepter(EndPort endport) noexcept:
-Xse::Network::Accepter(endPort),
+Xse::Network::Accepter(endport),
 serverfd(0)
 {
     if(this->endPort.ipfamily == IP_V4) {
@@ -60,8 +59,11 @@ serverfd(0)
         server_addr.sin_port = htons(endPort.port);
         server_addr.sin_addr.s_addr = inet_addr(endPort.host.c_str());
         BZERO(&(server_addr.sin_zero),8);
-        int server_socket = socket(AF_INET, SOCK_STREAM, 0);
-        serverfd = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
+        serverfd = socket(AF_INET, SOCK_STREAM, 0);
+        if(serverfd == -1){ Log::Write(Log::Level::ERROR,"server socket create faile."); return; }
+        int ret = bind(serverfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
+        if(ret == -1){ Log::Write(Log::Level::ERROR,"bind server socket faile."); return; }
+        if (listen(serverfd, 5) == -1) { Log::Write(Log::Level::ERROR,"server listen error."); return; }
     }else if(this->endPort.ipfamily == IP_V6) {
         struct sockaddr_in server_addr;
         server_addr.sin_len = sizeof(struct sockaddr_in);
@@ -69,8 +71,11 @@ serverfd(0)
         server_addr.sin_port = htons(endPort.port);
         server_addr.sin_addr.s_addr = inet_addr(endPort.host.c_str());
         BZERO(&(server_addr.sin_zero),8);
-        int server_socket = socket(AF_INET6, SOCK_STREAM, 0);
-        serverfd = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
+        serverfd = socket(AF_INET6, SOCK_STREAM, 0);
+         if(serverfd == -1){ Log::Write(Log::Level::ERROR,"server socket create faile."); return; }
+        int ret = bind(serverfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
+        if(ret == -1){ Log::Write(Log::Level::ERROR,"bind server socket faile."); return; }
+        if (listen(serverfd, 5) == -1) { Log::Write(Log::Level::ERROR,"server listen error."); return; }
     }
 }
 Xse::Network::TCPAccepter::~TCPAccepter(void){
@@ -111,20 +116,22 @@ SocketIO* Xse::Network::UDPAccepter::Accept(){
 /// Xse::Network::Server 
 ///////////////////////////////////////////////////////
 Xse::Network::Server::Server(const char* host,Int port,CommType type) noexcept {
-    struct EndPort endport = Xse::Network::MakeEndPort(host,port);
-    new(this)Server(endport,type);
+    EndPort _endport = Xse::Network::MakeEndPort(host,port);
+    switch(type){
+        case CommType::TCP:  { accepter = new TCPAccepter(_endport); break;}
+        case CommType::UDP:  { accepter = new UDPAccepter(_endport);break;}
+        default: Log::Write(Log::Level::ERROR, "used not supports socket type.");
+    }
 }
 
 Xse::Network::Server::Server(EndPort _endport,CommType type) noexcept:        
-endPort(_endport),
 accepter(nullptr)
 {
     switch(type){
-        case CommType::UDP:  { accepter = new TCPAccepter(endPort); break;}
-        case CommType::TCP:  { accepter = new UDPAccepter(endPort);break;}
-        default:
-            Log::Write(Log::Level::ERROR, "used not supports socket type.");
-    } 
+        case CommType::TCP:  { accepter = new TCPAccepter(_endport); break;}
+        case CommType::UDP:  { accepter = new UDPAccepter(_endport);break;}
+        default: Log::Write(Log::Level::ERROR, "used not supports socket type.");
+    }
 }
 
 Xse::Network::Server::~Server(void) noexcept{
@@ -136,5 +143,6 @@ void Xse::Network::Server::Start() noexcept{
         this->Dispatch(ServerEvent::ON_ERROR,this);
     }else {
         this->accepter->AddEventListener(ServerEvent::ON_NEW_CONNECTED,this);
+        this->accepter->Accept();
     }
 }

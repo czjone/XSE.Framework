@@ -1,0 +1,3 @@
+/Users/solyess/Documents/work/Github/XSE.Frameworks/src/build/sclient/CMakeFiles/rebuild_cache.dir
+/Users/solyess/Documents/work/Github/XSE.Frameworks/src/build/sclient/CMakeFiles/edit_cache.dir
+/Users/solyess/Documents/work/Github/XSE.Frameworks/src/build/sclient/CMakeFiles/XseClient.dir

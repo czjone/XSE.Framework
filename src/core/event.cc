@@ -36,7 +36,7 @@ void Dispatcher::Dispatch(EventType etype,void* data){
     vects = evts[etype];
     mut.unlock();
     auto itr = vects.begin();
-    while(itr == vects.end()){
+    while(itr != vects.end()){
         (*itr)->Handler(this,data);
         itr++;
     }

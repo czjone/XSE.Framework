@@ -88,7 +88,6 @@ namespace Xse {
 
         private:
             Accepter * accepter;
-            EndPort endPort;
         };
 
         class Client :Event::Dispatcher {
